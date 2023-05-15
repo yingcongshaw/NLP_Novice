@@ -5,8 +5,8 @@ from transformers import BertModel,RobertaModel
 from transformers import BertConfig as BC
 
 from transformers.optimization import AdamW, get_linear_schedule_with_warmup
-# from model.modeling import *
-from model.GNN import *
+from model.modeling import *
+# from model.GNN import *
 from tools.utils import convert_to_tokens
 from tools.data_iterator_pack import IGNORE_INDEX
 import numpy as np
