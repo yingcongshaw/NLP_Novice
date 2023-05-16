@@ -63,6 +63,7 @@ https://thunlp.oss-cn-qingdao.aliyuncs.com/bert/ms.zip
 训练的逻辑和代码在baseline/run_cail.py中. GNN还在测中。中间的训练过程和结果因为GitHub上不方便看，已删除。有兴趣的改哈模型的地址即可跑通。
 
 ### 五、评估
+未调优，初步结果对比：
 
 |      model      | chinese-bert-wwm | chinese-roberta-wwm-ext | thunlp-ms | chinese-roberta-wwm-ext-large | chinese-roberta-wwm-ext-large +2019 训练数据 |
 | :-------------: | :--------------: | :---------------------: | :-------: | :---------------------------: | :------------------------------------------: |
