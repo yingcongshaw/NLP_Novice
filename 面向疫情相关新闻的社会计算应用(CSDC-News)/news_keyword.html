@@ -1,0 +1,250 @@
+<!--
+	此示例下载自 https://echarts.apache.org/examples/zh/editor.html?c=bar-race-country
+-->
+<!DOCTYPE html>
+<html lang="zh-CN" style="height: 100%">
+<head>
+  <meta charset="utf-8">
+</head>
+<style>
+  .btn_start {z-index: 2000;position: absolute; left: 200px; bottom: 10px; height: 50px; width: 100px; line-height: 50px; color: white; font-family: 微软雅黑; font-size: 20px;background-color: #32CD32; border-radius: 30px; }
+  .btn_start:hover{background-color:#00FF00;}
+  .btn_end {z-index: 2000;position: absolute; right: 200px; bottom: 10px; height: 50px; width: 100px; line-height: 50px; color: white; font-family: 微软雅黑; font-size: 20px;background-color: #FF0000; border-radius: 30px; }
+  .btn_end:hover{background-color:#FF4500;}
+
+  .starter{z-index: 1000; position: absolute; width: 100%; height: 100%; background-color: white; vertical-align: middle; top: 0; left: 0; text-align: center;}
+  .starter div{background-color: #b18cca; font-family: 华文楷体;position: relative; top:40%; transform:translateY(-40%); }
+  .starter div h1{font-size: 40px; padding: 10px 0 0 0;}
+  .starter div h2{font-size: 20px; padding: 0 0 10px 0;text-shadow:1px 2px 1px gray;}
+  .starter div h3{font-size: 16px; padding: 0 0 0 0;text-shadow:1px 2px 1px gray;}
+</style>
+<body style="height: 100%; margin: 0">
+  <div id="container" style="height: 100%"></div>
+  <div class="starter" >
+    <div>
+      <h1>疫情期间新闻热点如何变化？</h1>
+      <h3>https://github.com/yingcongshaw/NLP_Novice</h3>
+      <h2>100秒带你走进新闻关键词变化历程</h2>
+    </div>
+  </div>
+
+  <input type="button" class="btn_start" value="开始" onclick="start()" />
+  <input type="button" class="btn_end" value="结束" onclick="end()"  />
+
+  <script type="text/javascript" src="./web/js/jquery"></script>
+  <script type="text/javascript" src="./web/js/echarts.min.js"></script>
+  <!-- Uncomment this line if you want to dataTool extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/extension/dataTool.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use gl extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to echarts-stat extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use map
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/china.js"></script>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+  -->
+  <!-- Uncomment these two lines if you want to use bmap extension
+  <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=YOUR_API_KEY"></script>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/extension/bmap.min.js"></script>
+  -->
+
+  <script type="text/javascript">
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {renderer: 'canvas', useDirtyRect: false });
+
+    const updateFrequency = 2000;
+    const dimension = 0;
+
+    var timer;
+    var audioDom = new Audio('./web/mp3/remember.mp3');
+
+    var data_keywords;
+    var option ;
+    var startDate = new Date('2020-01-01');
+    var endDate = new Date('2023-09-01');
+    var colors = ['#800000', '#A52A2A', '#FF0000', '#F08080', '#FF8C00', '#FFD700', '#808000', '#9ACD32','#556B2F', '#7CFC00', '#008000', '#98FB98', '#008080', '#00CED1', '#1E90FF', '#00008B', '#8A2BE2','#8B008B', '#FF00FF', '#FF69B4', '#8B4513', '#708090', '#9932CC']
+
+    var keyword_colors={}
+    
+    // 关键词对应颜色，并作暂时的待久化
+    function randomColor(keyword) {
+      if(!keyword_colors.hasOwnProperty(keyword))
+        keyword_colors[keyword] = colors[Object.keys(keyword_colors).length % colors.length];
+   
+      return keyword_colors[keyword];
+    }
+
+    /* 构造Y轴坐标上的文字及对应颜色*/
+    function getYAxisLabel(labels) {
+      var data_labels = [];
+      for (l in labels) {
+        var label ={  value: labels[l],
+                      textStyle: {
+                          fontSize: 16,
+                          color: randomColor(labels[l])
+                      }
+                    };
+        data_labels.push(label);
+      }
+      return data_labels;
+    }
+
+    // 讯取关键词按天构造的字典文件
+    $.getJSON('web/data/keywords.json', function (keywords) {
+        data_keywords = keywords; 
+        option = {
+        grid: {
+          top: 100,
+          bottom: 100,
+          left: 200,
+          right: 200
+        },
+        xAxis: {
+          max: 'dataMax',
+          axisLine:{show: true},
+          axisTick:{show: true},
+          axisLabel: {show: true},
+          axisLabel: {
+            fontSize: 18,
+            formatter: function (n) {
+              return Math.round(n) + '';
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          inverse: true,
+          max: 19,
+          axisLine:{show: false},
+          axisTick:{show: false},
+          axisLabel: {show: true},
+
+          data: getYAxisLabel(Object.keys(data_keywords['2020-01-01'])),
+          animationDuration: 100,
+          animationDurationUpdate: 100
+        },
+        series: [
+          {
+            realtimeSort: true,
+            seriesLayoutBy: 'column',
+            type: 'bar',
+            itemStyle: {
+              fontSize: 18,
+              borderRadius: [0, 10, 10, 0], //（顺时针左上，右上，右下，左下）
+              color: function (param) {
+                return randomColor(param.name);
+              }
+            },
+            label: {
+              show: true,
+              precision: 1,
+              // position: ['95%', '10%'],
+              position: 'insideRight',
+              offset:[36, 0],
+              color: 'inherit',
+              valueAnimation: true,
+              fontFamily: '微软雅黑',
+              formatter: '{aa|{b}}      {bb|{@score}}',
+              rich: {
+                aa: {
+                    fontWeight: 'bold',
+                    fontSize: 20,
+                    fontFamily: '华文彩云',
+                    color: '#ffffff'
+                },
+                bb: {
+                    // fontWeight: 'bold',
+                    fontSize: 16
+                }
+              }
+            },
+            // data:getYAxisValue(Object.keys(data_keywords['2020-01-01']),Object.values(data_keywords['2020-01-01']))
+            data:Object.values(data_keywords['2020-01-01'])
+          }
+        ],
+        // Disable init animation.
+        animationDuration: 0,
+        animationDurationUpdate: updateFrequency,
+        animationEasing: 'linear',
+        animationEasingUpdate: 'linear',
+        graphic: {
+          elements: [
+            {
+              type: 'text',
+              right: 200,
+              bottom: 100,
+              style: {
+                text: '2020-01-01',
+                font: 'bolder 40px 微软雅黑',
+                fill: 'rgba(100, 100, 100)'
+              },
+              z: 100
+            },
+            {
+              type: 'text' ,
+              top: 50,
+              left: 150,
+              style: {
+                text: 'Top 1',
+                font: 'bolder 40px 微软雅黑',
+                fill: 'rgba(100, 100, 100)'
+              },
+              z: 100
+            },
+            {
+              type: 'text' ,
+              top: 50,
+              right: 200,
+              style: {
+                text: '新闻关键词7天累计量',
+                font: 'bolder 40px 微软雅黑',
+                fill: 'rgba(100, 100, 100)'
+              },
+              z: 100
+            }
+          ]
+        }
+      };
+
+        myChart.setOption(option);
+      })
+
+      function updateday(day) {
+        // 在这里编写 updateday() 函数的逻辑
+        startDate.setDate(startDate.getDate() + day);
+
+        option.yAxis.data = getYAxisLabel(Object.keys(data_keywords[startDate.toISOString().slice(0, 10)]));
+        option.series[0].data = Object.values(data_keywords[startDate.toISOString().slice(0, 10)]);
+        option.graphic.elements[0].style.text = startDate.toISOString().slice(0, 10);
+        option.graphic.elements[1].style.text = 'Top 1           ' + Object.keys(data_keywords[startDate.toISOString().slice(0, 10)])[0];
+        myChart.setOption(option);
+        
+        // 数据太大后要调整偏移量
+        if(parseInt(option.series[0].data[0]) >1000)
+          option.series[0].label.offset = [50, 0]
+        // 检查是否达到结束日期
+        if (startDate > endDate) {
+          clearInterval(timer);
+        }
+      }
+
+    function start() {
+      $('.starter').slideUp(1000);
+      audioDom.play()
+      timer = setInterval(function() {
+        updateday(1); // 每次触发定时器，天数增加1天
+      }, 1000);
+    }
+
+    function end() {
+      audioDom.pause()
+      clearInterval(timer);
+    }
+    
+    window.addEventListener('resize', myChart.resize);
+  </script>
+</body>
+</html>
