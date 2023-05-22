@@ -4,7 +4,7 @@
 
 #### 二、思绪导图
 
-![CSDC-News](/data/Github/NLP_Novice/面向疫情相关新闻的社会计算应用(CSDC-News)/web/image/CSDC-News.png)
+![CSDC-News](./web/image/CSDC-News.png)
 
 
 
