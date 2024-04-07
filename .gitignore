@@ -1,11 +1,19 @@
-司法阅读理解(CAIL 2020)/output
-面向疫情相关新闻的社会计算应用(CSDC-News)/CCF_BDCI_2019/data/Second
-面向疫情相关新闻的社会计算应用(CSDC-News)/CCF_BDCI_2019/data/test.csv
-面向疫情相关新闻的社会计算应用(CSDC-News)/CCF_BDCI_2019/data/Test_DataSet.csv
-面向疫情相关新闻的社会计算应用(CSDC-News)/CCF_BDCI_2019/output
-面向疫情相关新闻的社会计算应用(CSDC-News)/news/comment
-面向疫情相关新闻的社会计算应用(CSDC-News)/news/data
-面向疫情相关新闻的社会计算应用(CSDC-News)/news/output
-面向疫情相关新闻的社会计算应用(CSDC-News)/news/.06-18.txt.swp
-面向疫情相关新闻的社会计算应用(CSDC-News)/news/.DS_Store
+1.Word2Vec_TranE的实现(Text8 Wikidata WordSim353)/Word2Vec/output
+2.seq2seq模型--机器翻译(NIST)/output
+3.文本情感分析(Rotten Tomato)/data/cc.en.300.bin
+3.文本情感分析(Rotten Tomato)/data/GoogleNews-vectors-negative300.bin
+3.文本情感分析(Rotten Tomato)/data/wiki-news-300d-1M.vec
+3.文本情感分析(Rotten Tomato)/output
+4.预训练语言模型实现与应用(DocRED)/checkpoint
+4.预训练语言模型实现与应用(DocRED)/log
+5.司法阅读理解(CAIL 2020)/output
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/CCF_BDCI_2019/data/Second
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/CCF_BDCI_2019/data/test.csv
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/CCF_BDCI_2019/data/Test_DataSet.csv
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/CCF_BDCI_2019/output
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/news/comment
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/news/data
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/news/output
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/news/.06-18.txt.swp
+6.面向疫情相关新闻的社会计算应用(CSDC-News)/news/.DS_Store
 
